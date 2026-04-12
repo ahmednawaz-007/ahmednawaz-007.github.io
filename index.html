@@ -235,48 +235,46 @@
   }
   .section-title {
     font-family: var(--font-head);
-    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
-    font-weight: 700;
+    font-size: clamp(1.8rem, 3vw, 2.5rem);
+    font-weight: 800;
     line-height: 1.15;
-    color: #fff;
     margin-bottom: 1rem;
+    color: #fff;
   }
   .section-desc {
+    font-size: 1.05rem;
     color: var(--text-muted);
-    max-width: 540px;
+    max-width: 560px;
+    margin-bottom: 3rem;
     font-weight: 300;
-    margin-bottom: 3.5rem;
+    line-height: 1.8;
   }
 
   /* INDUSTRIES */
-  #industries { background: var(--bg2); }
   .industries-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 1px;
-    background: var(--border);
-    border: 0.5px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
   }
   .industry-card {
     background: var(--bg2);
+    border: 0.5px solid var(--border);
+    border-radius: 8px;
     padding: 2rem;
-    position: relative;
-    transition: background 0.2s;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .industry-card:hover { background: var(--bg3); }
+  .industry-card:hover {
+    border-color: var(--border-accent);
+    background: rgba(245, 158, 11, 0.03);
+  }
   .industry-icon {
     font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--amber);
-    letter-spacing: 0.1em;
-    background: var(--amber-dim);
-    border: 0.5px solid var(--border-accent);
-    padding: 0.3rem 0.65rem;
-    border-radius: 3px;
-    display: inline-block;
-    margin-bottom: 1.25rem;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
   }
   .industry-name {
     font-family: var(--font-head);
@@ -286,157 +284,139 @@
     margin-bottom: 0.75rem;
   }
   .industry-pain {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
+    margin-bottom: 1.5rem;
     font-weight: 300;
-    margin-bottom: 1.25rem;
-    line-height: 1.7;
+    line-height: 1.6;
   }
   .industry-solutions {
     list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
   }
   .industry-solutions li {
-    font-family: var(--font-mono);
-    font-size: 11.5px;
-    color: var(--teal);
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    padding-left: 1.25rem;
+    margin-bottom: 0.6rem;
+    position: relative;
+    font-weight: 300;
   }
   .industry-solutions li::before {
     content: '→';
-    color: var(--teal);
-    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    color: var(--amber);
+    font-family: var(--font-mono);
   }
 
-  /* PORTFOLIO */
-  #portfolio { background: var(--bg); }
+  /* PROJECTS */
   .projects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 2rem;
   }
   .project-card {
     background: var(--bg2);
     border: 0.5px solid var(--border);
     border-radius: 8px;
-    padding: 1.75rem;
+    padding: 2rem;
     transition: border-color 0.2s, transform 0.2s;
-    position: relative;
-    overflow: hidden;
   }
-  .project-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, var(--amber), transparent);
-    opacity: 0;
-    transition: opacity 0.2s;
+  .project-card:hover {
+    border-color: var(--border-accent);
+    transform: translateY(-4px);
   }
-  .project-card:hover { border-color: var(--border-accent); transform: translateY(-3px); }
-  .project-card:hover::before { opacity: 1; }
   .project-num {
     font-family: var(--font-mono);
-    font-size: 11px;
+    font-size: 10px;
     color: var(--text-dim);
-    letter-spacing: 0.1em;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    display: block;
     margin-bottom: 1rem;
   }
   .project-title {
     font-family: var(--font-head);
-    font-size: 1.15rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: #fff;
-    margin-bottom: 0.6rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
   }
   .project-desc {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
-    font-weight: 300;
-    line-height: 1.7;
+    line-height: 1.6;
     margin-bottom: 1.5rem;
+    font-weight: 300;
   }
   .project-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
+    margin-bottom: 1.25rem;
   }
   .tag {
     font-family: var(--font-mono);
-    font-size: 10.5px;
+    font-size: 10px;
     color: var(--text-muted);
-    background: rgba(255,255,255,0.04);
+    background: rgba(255, 255, 255, 0.04);
     border: 0.5px solid var(--border);
-    padding: 0.25rem 0.6rem;
+    padding: 0.35rem 0.75rem;
     border-radius: 3px;
-    letter-spacing: 0.04em;
+    letter-spacing: 0.03em;
   }
 
   /* STACK */
-  #stack { background: var(--bg2); }
   .stack-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 1rem;
   }
   .stack-item {
-    background: var(--bg3);
+    background: var(--bg2);
     border: 0.5px solid var(--border);
     border-radius: 6px;
-    padding: 1rem;
+    padding: 1.25rem;
     text-align: center;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background 0.2s;
   }
-  .stack-item:hover { border-color: rgba(255,255,255,0.15); }
+  .stack-item:hover {
+    border-color: var(--border-accent);
+    background: rgba(245, 158, 11, 0.05);
+  }
   .stack-name {
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
+    font-family: var(--font-head);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
   }
 
-  /* CTA SECTION */
+  /* CTA */
   #contact {
-    background: var(--bg);
     text-align: center;
-    padding: 7rem 3rem;
-    position: relative;
-    overflow: hidden;
   }
-  #contact::before {
-    content: '';
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 600px; height: 400px;
-    background: radial-gradient(ellipse, rgba(245,158,11,0.04) 0%, transparent 70%);
-    pointer-events: none;
+  .contact-inner {
+    max-width: 700px;
+    margin: 0 auto;
   }
-  .contact-inner { position: relative; }
-  #contact .section-label { justify-content: center; }
-  #contact .section-label::before { display: none; }
-  #contact .section-title { max-width: 640px; margin: 0 auto 1rem; }
-  #contact .section-desc { margin: 0 auto 2.5rem; }
   .contact-ctas {
     display: flex;
-    justify-content: center;
     gap: 1rem;
+    justify-content: center;
     flex-wrap: wrap;
   }
 
   /* FOOTER */
   footer {
-    padding: 2rem 3rem;
+    background: var(--bg3);
     border-top: 0.5px solid var(--border);
+    padding: 3rem;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 2rem;
   }
   .footer-copy {
     font-family: var(--font-mono);
@@ -514,16 +494,16 @@
     </div>
     <div class="hero-stats fade-up">
       <div>
-        <div class="stat-num">3<span>+</span></div>
-        <div class="stat-label">Industries served</div>
+        <div class="stat-num">4<span>+</span></div>
+        <div class="stat-label">Live Projects</div>
       </div>
       <div>
         <div class="stat-num">5<span>+</span></div>
-        <div class="stat-label">Live automations</div>
+        <div class="stat-label">Industries Served</div>
       </div>
       <div>
         <div class="stat-num">100<span>%</span></div>
-        <div class="stat-label">Zero-cost stack</div>
+        <div class="stat-label">Zero-cost Stack</div>
       </div>
     </div>
   </div>
@@ -553,10 +533,10 @@
       <h3 class="industry-name">Property Management</h3>
       <p class="industry-pain">Tenant communications, maintenance requests, and lease renewals create non-stop manual coordination.</p>
       <ul class="industry-solutions">
+        <li>AI applicant screening & scoring</li>
         <li>Maintenance request routing & tracking</li>
         <li>Lease renewal notification workflows</li>
         <li>Tenant onboarding automation</li>
-        <li>Invoice & payment follow-up bots</li>
       </ul>
     </div>
 
@@ -624,6 +604,20 @@
       <a href="project-linkedin.html" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:1.25rem;font-family:var(--font-mono);font-size:12px;color:var(--amber);text-decoration:none;letter-spacing:0.06em;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">View Project →</a>
     </div>
 
+    <div class="project-card">
+      <div class="project-num">04 / PROPERTY MGMT</div>
+      <h3 class="project-title">Vacancy to Tenancy AI Screening</h3>
+      <p class="project-desc">AI system that screens 200 rental applicants and scores every single one in 60 seconds. Automated routing: qualified applicants get viewing links, others get polite rejections. Zero ghosting, 40% void reduction.</p>
+      <div class="project-tags">
+        <span class="tag">n8n</span>
+        <span class="tag">Tally.so</span>
+        <span class="tag">Groq API</span>
+        <span class="tag">Airtable</span>
+        <span class="tag">Gmail API</span>
+      </div>
+      <a href="project-property.html" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:1.25rem;font-family:var(--font-mono);font-size:12px;color:var(--amber);text-decoration:none;letter-spacing:0.06em;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">View Project →</a>
+    </div>
+
   </div>
 </section>
 
@@ -641,9 +635,9 @@
     <div class="stack-item"><div class="stack-name">Llama 3.1</div></div>
     <div class="stack-item"><div class="stack-name">Gmail API</div></div>
     <div class="stack-item"><div class="stack-name">Notion</div></div>
+    <div class="stack-item"><div class="stack-name">Airtable</div></div>
     <div class="stack-item"><div class="stack-name">Puppeteer</div></div>
     <div class="stack-item"><div class="stack-name">Node.js</div></div>
-    <div class="stack-item"><div class="stack-name">Webhooks</div></div>
     <div class="stack-item"><div class="stack-name">REST APIs</div></div>
   </div>
 </section>
