@@ -631,7 +631,7 @@
       </div>
       <div class="hero-stats fade-up">
         <div>
-          <div class="stat-num">4<span>+</span></div>
+          <div class="stat-num">5<span>+</span></div>
           <div class="stat-label">Live Projects</div>
         </div>
         <div>
@@ -763,6 +763,20 @@
       <a href="project-property.html" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:1.25rem;font-family:var(--font-mono);font-size:12px;color:var(--amber);text-decoration:none;letter-spacing:0.06em;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">View Project →</a>
     </div>
 
+    <div class="project-card">
+      <div class="project-num">05 / PORTFOLIO AI</div>
+      <h3 class="project-title">Portfolio Chatbot</h3>
+      <p class="project-desc">A live AI chatbot embedded in this portfolio. Visitors ask questions and get instant answers pulled from real project data via n8n, OpenRouter, and Google Sheets — while every chat auto-creates a HubSpot lead.</p>
+      <div class="project-tags">
+        <span class="tag">n8n</span>
+        <span class="tag">OpenRouter</span>
+        <span class="tag">HubSpot</span>
+        <span class="tag">Google Sheets</span>
+        <span class="tag">Webhook</span>
+      </div>
+      <a href="project-chatbot.html" style="display:inline-flex;align-items:center;gap:0.4rem;margin-top:1.25rem;font-family:var(--font-mono);font-size:12px;color:var(--amber);text-decoration:none;letter-spacing:0.06em;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.7" onmouseout="this.style.opacity=1">View Project →</a>
+    </div>
+
   </div>
 </section>
 
@@ -809,6 +823,247 @@
   </div>
 </footer>
 
-<script src="chatbot.js"></script>
+<!-- ═══════════════════════════════════════════
+     FLOATING CHAT WIDGET
+     STEP: Replace PASTE_YOUR_N8N_WEBHOOK_HERE
+     with your actual n8n webhook URL
+     ═══════════════════════════════════════════ -->
+<style>
+  /* WIDGET CONTAINER */
+  #chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 9999;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  /* TOGGLE BUTTON */
+  #chat-toggle {
+    width: 56px; height: 56px;
+    background: #F59E0B;
+    border: none; border-radius: 50%;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 24px rgba(245,158,11,0.45);
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-left: auto;
+  }
+  #chat-toggle:hover { transform: scale(1.08); box-shadow: 0 6px 32px rgba(245,158,11,0.6); }
+  #chat-toggle svg { width: 24px; height: 24px; fill: #07090d; transition: opacity 0.2s; }
+  #chat-toggle .icon-close { display: none; }
+
+  /* CHAT BOX */
+  #chat-box {
+    display: none;
+    flex-direction: column;
+    width: 340px;
+    height: 460px;
+    background: #0d1117;
+    border: 0.5px solid rgba(245,158,11,0.3);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.6);
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  #chat-box.open { display: flex; }
+
+  /* HEADER */
+  .cw-header {
+    padding: 0.9rem 1.1rem;
+    background: rgba(245,158,11,0.08);
+    border-bottom: 0.5px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap: 0.6rem;
+    flex-shrink: 0;
+  }
+  .cw-dot {
+    width: 8px; height: 8px; background: #F59E0B;
+    border-radius: 50%; box-shadow: 0 0 8px #F59E0B;
+    animation: cw-pulse 2s ease-in-out infinite; flex-shrink: 0;
+  }
+  @keyframes cw-pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+  .cw-header-text { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #F59E0B; letter-spacing: 0.07em; }
+
+  /* MESSAGES */
+  .cw-messages {
+    flex: 1; overflow-y: auto; padding: 1rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+    scrollbar-width: thin; scrollbar-color: rgba(255,255,255,0.08) transparent;
+  }
+  .cw-msg { max-width: 82%; }
+  .cw-msg.bot { align-self: flex-start; }
+  .cw-msg.user { align-self: flex-end; }
+  .cw-bubble {
+    padding: 0.6rem 0.85rem;
+    border-radius: 8px; font-size: 0.85rem; line-height: 1.55;
+  }
+  .cw-msg.bot .cw-bubble {
+    background: rgba(255,255,255,0.05);
+    border: 0.5px solid rgba(255,255,255,0.07);
+    color: #7A8499; border-bottom-left-radius: 2px;
+  }
+  .cw-msg.user .cw-bubble {
+    background: rgba(245,158,11,0.12);
+    border: 0.5px solid rgba(245,158,11,0.3);
+    color: #E8EAF0; border-bottom-right-radius: 2px;
+  }
+
+  /* TYPING DOTS */
+  .cw-typing {
+    display: none; gap: 4px; padding: 0.4rem 0; align-items: center;
+  }
+  .cw-typing.show { display: flex; }
+  .cw-typing span {
+    width: 6px; height: 6px; background: #4A5568;
+    border-radius: 50%; animation: cw-bounce 1.1s infinite;
+  }
+  .cw-typing span:nth-child(2) { animation-delay: 0.18s; }
+  .cw-typing span:nth-child(3) { animation-delay: 0.36s; }
+  @keyframes cw-bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+  /* INPUT ROW */
+  .cw-input-row {
+    padding: 0.75rem 1rem;
+    border-top: 0.5px solid rgba(255,255,255,0.07);
+    display: flex; gap: 0.5rem; align-items: center; flex-shrink: 0;
+    background: #07090d;
+  }
+  .cw-input {
+    flex: 1; background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(255,255,255,0.07); border-radius: 6px;
+    padding: 0.55rem 0.85rem; color: #E8EAF0; font-size: 0.85rem;
+    font-family: 'DM Sans', sans-serif; outline: none;
+    transition: border-color 0.2s;
+  }
+  .cw-input::placeholder { color: #4A5568; }
+  .cw-input:focus { border-color: rgba(245,158,11,0.4); }
+  .cw-send {
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+    color: #07090d; background: #F59E0B; border: none;
+    padding: 0.55rem 1rem; border-radius: 6px; cursor: pointer;
+    letter-spacing: 0.04em; transition: opacity 0.2s; white-space: nowrap;
+  }
+  .cw-send:hover { opacity: 0.85; }
+  .cw-send:disabled { opacity: 0.5; cursor: not-allowed; }
+</style>
+
+<div id="chat-widget">
+  <div id="chat-box">
+    <div class="cw-header">
+      <div class="cw-dot"></div>
+      <span class="cw-header-text">Ahmed's AI Assistant</span>
+    </div>
+    <div class="cw-messages" id="cwMessages">
+      <div class="cw-msg bot">
+        <div class="cw-bubble">Hi! I'm Ahmed's assistant. Ask me about his automation services, projects, or how to hire him 👋</div>
+      </div>
+    </div>
+    <div class="cw-input-row">
+      <input class="cw-input" id="cwInput" type="text" placeholder="Type a message..." />
+      <button class="cw-send" id="cwSend">Send</button>
+    </div>
+  </div>
+  <button id="chat-toggle" onclick="toggleChat()">
+    <svg class="icon-open" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 2C6.48 2 2 6.03 2 11c0 2.67 1.19 5.07 3.09 6.75L4 22l4.62-1.54C9.97 20.8 10.97 21 12 21c5.52 0 10-4.03 10-9S17.52 2 12 2zm1 13H7v-2h6v2zm4-4H7V9h10v2z"/>
+    </svg>
+    <svg class="icon-close" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+    </svg>
+  </button>
+</div>
+
+<script>
+  // ─────────────────────────────────────────────
+  // PASTE YOUR N8N WEBHOOK URL BELOW
+  // ─────────────────────────────────────────────
+  const CW_WEBHOOK = 'PASTE_YOUR_N8N_WEBHOOK_HERE';
+  // ─────────────────────────────────────────────
+
+  const cwBox     = document.getElementById('chat-box');
+  const cwMsgs    = document.getElementById('cwMessages');
+  const cwInput   = document.getElementById('cwInput');
+  const cwSend    = document.getElementById('cwSend');
+  const toggleBtn = document.getElementById('chat-toggle');
+
+  function toggleChat() {
+    const isOpen = cwBox.classList.toggle('open');
+    toggleBtn.querySelector('.icon-open').style.display  = isOpen ? 'none'  : 'block';
+    toggleBtn.querySelector('.icon-close').style.display = isOpen ? 'block' : 'none';
+    if (isOpen) cwInput.focus();
+  }
+
+  function appendMsg(text, role) {
+    const wrap = document.createElement('div');
+    wrap.className = `cw-msg ${role}`;
+    const b = document.createElement('div');
+    b.className = 'cw-bubble';
+    b.textContent = text;
+    wrap.appendChild(b);
+    cwMsgs.appendChild(wrap);
+    cwMsgs.scrollTop = cwMsgs.scrollHeight;
+  }
+
+  function showTyping() {
+    const t = document.createElement('div');
+    t.className = 'cw-typing show cw-msg bot';
+    t.id = 'cwTyping';
+    t.innerHTML = '<span></span><span></span><span></span>';
+    cwMsgs.appendChild(t);
+    cwMsgs.scrollTop = cwMsgs.scrollHeight;
+  }
+
+  function removeTyping() {
+    const t = document.getElementById('cwTyping');
+    if (t) t.remove();
+  }
+
+  async function sendMsg() {
+    const text = cwInput.value.trim();
+    if (!text) return;
+
+    appendMsg(text, 'user');
+    cwInput.value = '';
+    cwSend.disabled = true;
+    showTyping();
+
+    try {
+      const res = await fetch(CW_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      removeTyping();
+
+      // Handle different n8n response shapes
+      const reply =
+        (typeof data === 'string' ? data : null) ||
+        data.reply || data.message || data.output ||
+        data.text || data.answer ||
+        (data[0] && (data[0].reply || data[0].output || data[0].text)) ||
+        'Got your question! Ahmed will follow up shortly.';
+
+      appendMsg(reply, 'bot');
+    } catch (err) {
+      removeTyping();
+      appendMsg("Hmm, couldn't connect right now. Feel free to message Ahmed directly on Upwork!", 'bot');
+    }
+
+    cwSend.disabled = false;
+    cwInput.focus();
+  }
+
+  cwSend.addEventListener('click', sendMsg);
+  cwInput.addEventListener('keydown', e => { if (e.key === 'Enter') sendMsg(); });
+</script>
+
 </body>
 </html>
